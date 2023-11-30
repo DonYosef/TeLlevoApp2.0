@@ -9,7 +9,7 @@
     <div class="d-flex-center">
 
       <form class="ion-text-center" (keyup.enter)="submit()" (ngSubmit)="submit()">
-        <app-custom-input [control]="form.controls.email" type="email" label="Correo" icon="mail-outline">
+        <app-custom-input autocomplete="email" [control]="form.controls.email" type="email" label="Correo" icon="mail-outline">
         </app-custom-input>
       <div class="validators" *ngIf="form.controls.email.errors && form.controls.email.dirty">
         <div *ngIf="form.controls.email.errors?.['required']"> Ingresa tu email </div>
@@ -27,8 +27,8 @@
       </ion-button>
 
       <div class="sign-up">¿No tienes cuenta?</div>
-      <ion-button  shape="around">
-        Regístrate
+      <ion-button routerLink="signup"  shape="around">
+        Regístrame
         <ion-icon slot="end" name="person-add-outline"></ion-icon>
       </ion-button>
 
