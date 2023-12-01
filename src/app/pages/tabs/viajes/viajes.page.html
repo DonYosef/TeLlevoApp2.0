@@ -1,0 +1,35 @@
+
+<ion-content [fullscreen]="true">
+  <app-header title="Viajes disponibles"></app-header>
+  <div class="content ion-text-center">
+
+    <ion-card color="primary" *ngIf="user.tipo == 'Conductor'">
+      <ion-card-header>
+        <ion-card-title>Crear nuevo viaje</ion-card-title>
+        <ion-card-subtitle>
+        </ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-header color="medium">
+        <ion-card-title>Crear viaje</ion-card-title>
+        <ion-card-subtitle>
+          <ion-label position="floating">Origen:</ion-label>
+          <ion-input id="origen" [clearInput]="true" type="text" class="custom-clear-input" [(ngModel)]="viaje.origen" required></ion-input>
+          <ion-label position="floating">Destino:</ion-label>
+          <ion-input id="destino" [clearInput]="true" type="text" class="custom-clear-input"[(ngModel)]="viaje.destino" required></ion-input>
+          <ion-label position="floating">Capacidad:</ion-label>
+          <ion-input id="capacidad" [clearInput]="true" type="number" class="custom-clear-input" [(ngModel)]="viaje.capacidad" required></ion-input>
+          <ion-label position="floating">Tarifa:</ion-label>
+          <ion-input id="tarifa" [clearInput]="true" type="number" class="custom-clear-input" [(ngModel)]="viaje.tarifa" required></ion-input>
+          <ion-button (click)="crearViaje()">Crear viaje</ion-button>
+        </ion-card-subtitle>
+      </ion-card-header>
+    </ion-card>
+
+    <ion-card color="primary" *ngIf="user.tipo == 'Pasajero'">
+      <ion-card-title>Viajes disponibles</ion-card-title>
+
+    </ion-card>
+
+
+  </div>
+</ion-content>
