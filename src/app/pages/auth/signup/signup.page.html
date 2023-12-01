@@ -10,8 +10,18 @@
 
       <form class="ion-text-center" (keyup.enter)="submit()" (ngSubmit)="submit()">
 
-        <app-custom-input autocomplete="name" [control]="form.controls.name" type="text" label="Nombre de usuario" icon="person-outline">
-        </app-custom-input>
+        <h3>Seleccione tipo de cuenta</h3>
+        <app-custom-input
+          [control]="form.controls.tipo"
+          [type]="'radio'"
+          [radioOptions]="['Conductor', 'Pasajero']"
+      ></app-custom-input>
+      <div class="validators" *ngIf="form.controls.tipo.errors && form.controls.tipo.dirty">
+        <div *ngIf="form.controls.tipo.errors?.['required']"> Seleccione un tipo de cuenta </div>
+      </div>
+
+      <app-custom-input autocomplete="name" [control]="form.controls.name" type="text" label="Nombre de usuario" icon="person-outline">
+      </app-custom-input>
       <div class="validators" *ngIf="form.controls.name.errors && form.controls.name.dirty">
         <div *ngIf="form.controls.name.errors?.['required']"> Ingresa un nombre de usuario </div>
         <div *ngIf="form.controls.name.errors?.['minlength']"> Nombre de usuario invalido </div>

@@ -12,23 +12,24 @@ export class ProfilePage implements OnInit {
 
 
   user = {} as User;
+  login: boolean = false;
 
   constructor(
     private firebaseSvc: FirebaseService,
     private utilsSvc: UtilsService
-  ) { }
+  ) {
+    this.firebaseSvc.getAuthState().subscribe(res => {
+      if(res && res.uid){
+        this.login = true;
+        this.getDatosUser(res.uid);
+
+      } else {
+        this.login = false;
+      }
+    })
+   }
 
   ngOnInit() {
-  }
-
-  ionViewWillEnter(){
-    this.getUser();
-  }
-
-
-
-  getUser(){
-    return this.user = this.utilsSvc.getElementLocalStorage('user');
   }
 
   signOut() {
@@ -49,6 +50,16 @@ export class ProfilePage implements OnInit {
         }
       ]
     })
+  }
+
+  getDatosUser(uid: string){
+    const path = 'users';
+    const id = uid;
+    this.firebaseSvc.getDoc<User>(path, id).subscribe(res => {
+      if(res){
+        this.user = res;
+      }
+    });
   }
 
 }

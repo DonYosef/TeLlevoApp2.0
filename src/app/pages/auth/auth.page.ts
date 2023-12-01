@@ -10,6 +10,9 @@ import { UtilsService } from 'src/app/services/utils.service';
   styleUrls: ['./auth.page.scss'],
 })
 export class AuthPage implements OnInit {
+
+  public tipo: string = 'ok';
+
   form = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [
@@ -17,22 +20,30 @@ export class AuthPage implements OnInit {
       Validators.minLength(6),
     ]),
   });
+
+  uid: string = null;
+
   constructor(
-          private firebaseSvc: FirebaseService,
+      private firebaseSvc: FirebaseService,
       private utilSvc: UtilsService
   ) {}
 
-  ngOnInit() {}
+  async ngOnInit() {
+
+  }
 
   submit() {
+
     if (this.form.valid) {
-      console.log(this.form.value);
       this.utilSvc.presentLoading({message: 'Autenticando...'});
       this.firebaseSvc.login(this.form.value as User).then(async res => {
-        console.log(res);
+
+        // this.uid = await this.firebaseSvc.getUid();
+        // console.log('uid', this.uid);
 
         let user: User = {
           uid: res.user.uid,
+          tipo: this.tipo,
           name: res.user.displayName,
           email: res.user.email
         }
@@ -44,18 +55,16 @@ export class AuthPage implements OnInit {
 
         this.utilSvc.presentToast({
           message: `Bienvenid@ ${user.name}!`,
-          duration: 3000,
-          color: 'primary',
+          duration: 1500,
+          color: 'success',
           icon: 'person-circle-outline'
         })
-
-
         this.form.reset();
       }, error => {
         this.utilSvc.dismissLoading();
         this.utilSvc.presentToast({
           message: error,
-          duration: 3000,
+          duration: 2000,
           color: 'warning',
           icon: 'alert-circle-outline'
         })

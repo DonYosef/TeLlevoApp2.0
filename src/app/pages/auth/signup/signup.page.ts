@@ -14,6 +14,9 @@ export class SignupPage implements OnInit {
 
 
     form = new FormGroup({
+      tipo: new FormControl('', [
+        Validators.required,
+      ]),
       name: new FormControl('', [
         Validators.required,
         Validators.minLength(3),
@@ -47,39 +50,42 @@ export class SignupPage implements OnInit {
 
     submit() {
       if (this.form.valid) {
-        console.log(this.form.value);
         this.utilSvc.presentLoading({message: 'Registrando...'});
-        this.firebaseSvc.signUp(this.form.value as User).then(async res => {
-          console.log(res);
+        const estado = this.firebaseSvc.signUp(this.form.value as User).then(async res => {
+
           await this.firebaseSvc.updateUser({displayName: this.form.value.name});
 
           let user: User = {
             uid: res.user.uid,
-            name: res.user.displayName,
-            email: res.user.email
+            tipo: this.form.value.tipo,
+            name: this.form.value.name,
+            email: this.form.value.email
           }
 
-          this.utilSvc.setElementLocalStorage('user', user);
-          this.utilSvc.routerLink('/tabs/home');
+          if(estado){
 
-          this.utilSvc.dismissLoading();
+            const path = 'users';
+            const id = res.user.uid;
+            this.firebaseSvc.createDoc(user, path, id);
 
-          this.utilSvc.presentToast({
-            message: `¡Registro exitoso!, bienvenid@ ${user.name}!`,
-            duration: 3000,
-            color: 'primary',
-            icon: 'person-circle-outline'
-          })
-          this.form.reset();
-        }, error => {
-          this.utilSvc.dismissLoading();
-          this.utilSvc.presentToast({
-            message: error,
-            duration: 3000,
-            color: 'warning',
-            icon: 'alert-circle-outline'
-          })
+            this.utilSvc.routerLink('/tabs/home');
+            this.utilSvc.dismissLoading();
 
+            this.utilSvc.presentToast({
+              message: `¡Registro exitoso!, bienvenid@ ${user.name}!`,
+              duration: 1500,
+              color: 'primary',
+              icon: 'person-circle-outline'
+            })
+            this.form.reset();
+          }else{
+            this.utilSvc.dismissLoading();
+            this.utilSvc.presentToast({
+              duration: 1500,
+              color: 'warning',
+              icon: 'alert-circle-outline'
+            })
+          }
         }
         );
       }

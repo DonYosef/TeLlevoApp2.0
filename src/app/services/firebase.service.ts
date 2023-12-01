@@ -4,6 +4,7 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { User } from './../models/user.model';
 import { getAuth, updateProfile } from 'firebase/auth';
 import { UtilsService } from './utils.service';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +18,20 @@ export class FirebaseService {
   ) { }
 
   //===========AUTH================
+
+  // async getUid(){
+  //   const user = await this.auth.currentUser;
+  //   return user.uid;
+  // }
+
+  createDoc(data: any, path: string, id: string){
+    const collection = this.db.collection(path);
+    return collection.doc(id).set(data);
+  }
+
+  getUserInfo(uid: string) {
+    return this.db.collection('users').doc(uid).valueChanges() as Observable<User>;
+  }
 
   login(user: User){
     return this.auth.signInWithEmailAndPassword(user.email, user.password);
@@ -33,6 +48,10 @@ export class FirebaseService {
 
   getAuthState(){
     return this.auth.authState;
+  }
+
+  getDoc<tipo>(path: string, id: string){
+    return this.db.collection(path).doc<tipo>(id).valueChanges();
   }
 
   async signOut(){

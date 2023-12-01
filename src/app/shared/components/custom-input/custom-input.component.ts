@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 @Component({
@@ -13,8 +13,10 @@ export class CustomInputComponent  implements OnInit {
   @Input() icon: string;
   @Input() type : string;
   @Input() autocomplete: string;
+  @Input() radioOptions: string[];
 
   isPassword: boolean;
+  isRadio: boolean;
   hide: boolean = true;
 
   constructor() { }
@@ -22,6 +24,9 @@ export class CustomInputComponent  implements OnInit {
   ngOnInit() {
     if(this.type === 'password'){
       this.isPassword = true;
+    }
+    if(this.type === 'radio'){
+      this.isRadio = true;
     }
   }
 
@@ -33,5 +38,10 @@ export class CustomInputComponent  implements OnInit {
     }else{
       this.type = 'text';
     }
+  }
+
+  radioChanged(event: CustomEvent) {
+    const selectedValue = event.detail.value;
+    this.control.setValue(selectedValue);
   }
 }

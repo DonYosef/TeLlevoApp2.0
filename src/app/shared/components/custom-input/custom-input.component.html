@@ -1,7 +1,18 @@
+
+
 <ion-item class="ion-margin-vertical">
+
+  <ion-item *ngIf="isRadio"  slot="start">
+    <ion-radio-group  [formControl]="control" (ionChange)="radioChanged($event)">
+      <ion-radio *ngFor="let option of radioOptions" [value]="option">{{option}}</ion-radio>
+    </ion-radio-group>
+  </ion-item>
+
   <ion-icon color="primary" *ngIf="icon" slot="start" [name]="icon"></ion-icon>
   <ion-label position="floating">{{label}}</ion-label>
+
   <ion-input debounce="500" [autocomplete]="autocomplete" [type]="type" [formControl]="control"></ion-input>
+
 
   <ion-buttons *ngIf="isPassword" slot="end">
     <ion-button (click)="showEyePassword()">

@@ -68,3 +68,23 @@ ion-button{
   justify-content: center;
   align-items: center;
 }
+
+ion-radio-group{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+}
+
+
+ion-radio-group ion-radio{
+  margin: 0px 10px;
+}
+
+@media screen and (min-width: 769px){
+  ion-radio-group{
+    margin-left: 60px;
+  }
+
+
+}
