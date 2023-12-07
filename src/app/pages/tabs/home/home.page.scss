@@ -1,0 +1,25 @@
+#principal{
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: center;
+}
+
+ion-card {
+  --color: #52ffe4;
+  --background: linear-gradient(to right, #3498db, #1180b9);
+}
+
+ion-card-title {
+  --color: #52ffe4;
+}
+
+ion-card-subtitle {
+  --color: #d1fff8;
+}
+
+ion-item{
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}

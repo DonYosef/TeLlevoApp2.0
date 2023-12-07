@@ -25,6 +25,9 @@ export class SignupPage implements OnInit {
         Validators.required,
         Validators.email,
       ]),
+      phoneNumber: new FormControl('', [
+        Validators.required
+      ]),
       password: new FormControl('', [
         Validators.required
       ]),
@@ -48,46 +51,47 @@ export class SignupPage implements OnInit {
       this.form.controls.confirmPassword.updateValueAndValidity();
     }
 
-    submit() {
+    async submit() {
       if (this.form.valid) {
-        this.utilSvc.presentLoading({message: 'Registrando...'});
-        const estado = this.firebaseSvc.signUp(this.form.value as User).then(async res => {
+        this.utilSvc.presentLoading({ message: 'Registrando...' });
 
-          await this.firebaseSvc.updateUser({displayName: this.form.value.name});
+        try {
+          const res = await this.firebaseSvc.signUp(this.form.value as User);
+
+          await this.firebaseSvc.updateUser({ displayName: this.form.value.name });
 
           let user: User = {
             uid: res.user.uid,
             tipo: this.form.value.tipo,
             name: this.form.value.name,
-            email: this.form.value.email
-          }
+            email: this.form.value.email,
+            phoneNumber: this.form.value.phoneNumber,
+          };
 
-          if(estado){
+          const path = 'users';
+          const id = res.user.uid;
+          await this.firebaseSvc.createDoc(user, path, id);
 
-            const path = 'users';
-            const id = res.user.uid;
-            this.firebaseSvc.createDoc(user, path, id);
+          this.utilSvc.routerLink('/tabs/home');
+          this.utilSvc.dismissLoading();
 
-            this.utilSvc.routerLink('/tabs/home');
-            this.utilSvc.dismissLoading();
+          this.utilSvc.presentToast({
+            message: `¡Registro exitoso!, bienvenid@ ${user.name}!`,
+            duration: 1500,
+            color: 'primary',
+            icon: 'person-circle-outline',
+          });
 
-            this.utilSvc.presentToast({
-              message: `¡Registro exitoso!, bienvenid@ ${user.name}!`,
-              duration: 1500,
-              color: 'primary',
-              icon: 'person-circle-outline'
-            })
-            this.form.reset();
-          }else{
-            this.utilSvc.dismissLoading();
-            this.utilSvc.presentToast({
-              duration: 1500,
-              color: 'warning',
-              icon: 'alert-circle-outline'
-            })
-          }
+          this.form.reset();
+        } catch (error) {
+          console.error('Error al registrar:', error);
+          this.utilSvc.dismissLoading();
+          this.utilSvc.presentToast({
+            duration: 1500,
+            color: 'warning',
+            icon: 'alert-circle-outline',
+          });
         }
-        );
       }
     }
   }

@@ -34,6 +34,12 @@
         <div *ngIf="form.controls.email.errors?.['email']"> Ingresa un email valido </div>
       </div>
 
+      <app-custom-input autocomplete="phoneNumber" [control]="form.controls.phoneNumber" type="text" label="Telefono:" icon="mail-outline">
+      </app-custom-input>
+      <div class="validators" *ngIf="form.controls.phoneNumber.errors && form.controls.phoneNumber.dirty">
+        <div *ngIf="form.controls.phoneNumber.errors?.['required']"> Ingresa tu phoneNumber </div>
+      </div>
+
       <app-custom-input [control]="form.controls.password" type="password" label="Contaseña" icon="lock-closed-outline">
       </app-custom-input>
       <div class="validators" *ngIf="form.controls.password.errors && form.controls.password.dirty">

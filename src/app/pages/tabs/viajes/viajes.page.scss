@@ -1,0 +1,48 @@
+ion-card {
+  --color: #52ffe4;
+  --background: linear-gradient(to right, #3498db, #1180b9);
+}
+
+ion-card-title {
+  --color: #52ffe4;
+}
+
+ion-card-subtitle {
+  --color: #d1fff8;
+}
+
+ion-item{
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+.viajesDisponibles{
+  display: flex;
+  flex-direction: row;
+}
+
+#ingreso{
+  width: 60%;
+  height: 80%;
+}
+
+@media screen and (max-width: 976px) {
+
+  .viajesDisponibles{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 1100px;
+    margin-top: -300px;
+  }
+  .viajesDisponibles ion-item{
+    height: 30%;
+  }
+
+  .viajesDisponibles ion-card{
+    height: 220px;
+  }
+
+}

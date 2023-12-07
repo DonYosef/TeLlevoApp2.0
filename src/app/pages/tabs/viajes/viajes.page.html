@@ -1,34 +1,82 @@
 
-<ion-content [fullscreen]="true">
+<ion-content class="contenedor" [fullscreen]="true">
   <app-header title="Viajes disponibles"></app-header>
   <div class="content ion-text-center">
 
-    <ion-card color="primary" *ngIf="user.tipo == 'Conductor'">
+    <ion-card id="ingreso" color="primary" *ngIf="user.tipo == 'Conductor'">
       <ion-card-header>
         <ion-card-title>Crear nuevo viaje</ion-card-title>
         <ion-card-subtitle>
         </ion-card-subtitle>
       </ion-card-header>
       <ion-card-header color="medium">
-        <ion-card-title>Crear viaje</ion-card-title>
-        <ion-card-subtitle>
-          <ion-label position="floating">Origen:</ion-label>
-          <ion-input id="origen" [clearInput]="true" type="text" class="custom-clear-input" [(ngModel)]="viaje.origen" required></ion-input>
-          <ion-label position="floating">Destino:</ion-label>
-          <ion-input id="destino" [clearInput]="true" type="text" class="custom-clear-input"[(ngModel)]="viaje.destino" required></ion-input>
-          <ion-label position="floating">Capacidad:</ion-label>
-          <ion-input id="capacidad" [clearInput]="true" type="number" class="custom-clear-input" [(ngModel)]="viaje.capacidad" required></ion-input>
-          <ion-label position="floating">Tarifa:</ion-label>
-          <ion-input id="tarifa" [clearInput]="true" type="number" class="custom-clear-input" [(ngModel)]="viaje.tarifa" required></ion-input>
-          <ion-button (click)="crearViaje()">Crear viaje</ion-button>
-        </ion-card-subtitle>
+          <form [formGroup]="formulario">
+
+            <ion-label position="floating">Origen:</ion-label>
+            <div class="validators" *ngIf="formulario.get('origen')?.errors">
+              <div *ngIf="formulario.get('origen')?.errors?.['required']"> Ingrese comuna origen</div>
+            </div>
+            <ion-input formControlName="origen" id="origen" [clearInput]="true" type="text" class="custom-clear-input"required></ion-input>
+
+
+            <ion-label position="floating">Destino:</ion-label>
+            <div class="validators" *ngIf="formulario.get('destino')?.errors">
+              <div *ngIf="formulario.get('destino')?.errors?.['required']"> Ingrese comuna destino</div>
+            </div>
+            <ion-input formControlName="destino" id="destino" [clearInput]="true" type="text" class="custom-clear-input" required></ion-input>
+
+
+            <ion-label position="floating">Hora salida:</ion-label>
+            <div class="validators" *ngIf="formulario.get('hora')?.errors">
+              <div *ngIf="formulario.get('hora')?.errors?.['required']"> Ingrese hora del viaje en formato "HH:MM"</div>
+            </div>
+            <ion-input formControlName="hora" id="hora" [clearInput]="true" type="text" class="custom-clear-input" required></ion-input>
+
+
+            <ion-label  position="floating">Capacidad:</ion-label>
+            <div class="validators" *ngIf="formulario.get('capacidad')?.errors">
+              <div *ngIf="formulario.get('capacidad')?.errors?.['required']"> Seleccione capacidad de asientos</div>
+            </div>
+            <ion-select formControlName="capacidad" label-placement="floating" justify="end" required>
+              <ion-select-option value="1">1</ion-select-option>
+              <ion-select-option value="2">2</ion-select-option>
+              <ion-select-option value="3">3</ion-select-option>
+              <ion-select-option value="4">4</ion-select-option>
+            </ion-select>
+
+
+            <ion-label position="floating">Tarifa:</ion-label>
+            <div class="validators" *ngIf="formulario.get('tarifa')?.errors">
+              <div *ngIf="formulario.get('tarifa')?.errors?.['required']"> Ingrese tarifa</div>
+            </div>
+            <ion-input formControlName="tarifa" id="tarifa" [clearInput]="true" type="number" class="custom-clear-input" ></ion-input>
+
+
+            <ion-button [disabled]="formulario.invalid" (click)="crearViaje()">Crear viaje</ion-button>
+          </form>
       </ion-card-header>
     </ion-card>
 
-    <ion-card color="primary" *ngIf="user.tipo == 'Pasajero'">
-      <ion-card-title>Viajes disponibles</ion-card-title>
+    <div class="viajesDisponibles" color="primary" *ngIf="user.tipo == 'Pasajero'">
+      <ion-item class="ion-text-center" *ngFor=" let viaje of viajesList" style="width: 100%;" >
+        <ion-card >
+          <ion-card-title >Origen: {{viaje.origen}}</ion-card-title>
+          <ion-card-title>Destino: {{viaje.destino}}</ion-card-title>
+          <ion-card-subtitle>Hora salida: {{viaje.hora}}</ion-card-subtitle>
+          <ion-card-content>
+            <ion-item>
+              Asientos disponibles: {{viaje.capacidad}}
+            </ion-item>
+            <ion-item>
+              Tarifa por asiento: ${{viaje.tarifa}}
+            </ion-item >
+            <ion-button [disabled]="botonDesactivado" (click)="reservarViaje(viaje)">Reservar</ion-button>
+          </ion-card-content>
+          {{viaje | json}}
+        </ion-card>
+      </ion-item>
+    </div>
 
-    </ion-card>
 
 
   </div>

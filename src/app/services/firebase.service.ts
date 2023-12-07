@@ -4,7 +4,7 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { User } from './../models/user.model';
 import { getAuth, updateProfile } from 'firebase/auth';
 import { UtilsService } from './utils.service';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -54,9 +54,36 @@ export class FirebaseService {
     return this.db.collection(path).doc<tipo>(id).valueChanges();
   }
 
+  // getDocViaje<tipo>(path: string){
+  //   return this.db.collection(path).valueChanges();
+  // }
+
+  getCollection<tipo>(path: string): Observable<tipo[]> {
+    return this.db.collection<tipo>(path).snapshotChanges().pipe(
+      map(actions => {
+        return actions.map(a => {
+          const data = a.payload.doc.data() as tipo;
+          const id = a.payload.doc.id;
+          return { id, ...data } as tipo;
+        });
+      })
+    );
+  }
+
+  getDocViaje<tipo>(path: string): Observable<tipo[]> {
+    return this.getCollection<tipo>(path);
+  }
+
   async signOut(){
     await this.auth.signOut();
     this.utilsSvc.routerLink('/auth')
     localStorage.removeItem('user');
   }
+
+  updateDoc<tipo>(path: string, data: tipo): Promise<void> {
+    const docRef = this.db.doc<tipo>(path);
+    return docRef.update(data);
+  }
+
+
 }

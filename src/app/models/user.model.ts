@@ -4,6 +4,7 @@ export interface User {
   tipo: string;
   name: string;
   email: string;
+  phoneNumber: string;
   password?: string;
 
 }

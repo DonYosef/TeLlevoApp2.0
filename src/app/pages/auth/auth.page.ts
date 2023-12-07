@@ -45,7 +45,8 @@ export class AuthPage implements OnInit {
           uid: res.user.uid,
           tipo: this.tipo,
           name: res.user.displayName,
-          email: res.user.email
+          email: res.user.email,
+          phoneNumber: res.user.phoneNumber
         }
 
         this.utilSvc.setElementLocalStorage('user', user);
@@ -55,7 +56,7 @@ export class AuthPage implements OnInit {
 
         this.utilSvc.presentToast({
           message: `Bienvenid@ ${user.name}!`,
-          duration: 1500,
+          duration: 1000,
           color: 'success',
           icon: 'person-circle-outline'
         })

@@ -1,9 +1,42 @@
-
 <ion-content [fullscreen]="true">
   <app-header title="Inicio"></app-header>
-  <div class="content ion-text-center">
+  <div id="principal" class="content ion-text-center">
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d3323.2613083367496!2d-70.70738329191296!3d-33.59852386531931!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1ses!2scl!4v1701457610006!5m2!1ses!2scl"
+      width="85%" height="230" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+    ></iframe>
 
-    <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d3323.2613083367496!2d-70.70738329191296!3d-33.59852386531931!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1ses!2scl!4v1701457610006!5m2!1ses!2scl" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    <div color="primary">
+      <h2 *ngIf="user.tipo == 'Pasajero'">Mis viajes programados:</h2>
+      <h2 *ngIf="user.tipo == 'Conductor'">Mis viajes creados:</h2>
 
+      <ion-item class="ion-text-center" *ngFor="let viaje of viajesList" style="width: 100%;">
+        <ion-card  *ngIf="shouldShowViaje(viaje)">
+          <ion-card-title>Origen: {{ viaje.origen }}</ion-card-title>
+          <ion-card-title>Destino: {{ viaje.destino }}</ion-card-title>
+          <ion-card-subtitle>Hora salida: {{ viaje.hora }}</ion-card-subtitle>
+          <ion-card-content *ngIf="user.tipo == 'Pasajero'">
+            <ion-item>
+              Tarifa a cancelar ${{ viaje.tarifa }}
+            </ion-item>
+            <ion-item>
+              Contacto del conductor: +569 {{viaje.telefono}}
+            </ion-item >
+          </ion-card-content>
+          <ion-card-content *ngIf="user.tipo == 'Conductor'">
+            <ion-item>
+              Asientos disponibles: {{ viaje.capacidad }}
+            </ion-item>
+            <ion-item>
+              Tarifa por asiento: ${{ viaje.tarifa }}
+            </ion-item>
+            <ion-item *ngFor="let pasajero of viajesList">
+              Pasajeros inscritos: {{pasajero.pasajeros}}
+            </ion-item >
+          </ion-card-content>
+          {{ viaje | json }}
+        </ion-card>
+      </ion-item>
+    </div>
   </div>
 </ion-content>

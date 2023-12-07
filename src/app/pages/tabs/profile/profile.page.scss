@@ -3,6 +3,12 @@
 
 }
 
-ion-button{
-  margin-top: 50px;
+ion-list{
+  background: none;
+}
+
+ion-item{
+  --background: transparent;
+  display: block;
+  flex-direction: column;
 }
